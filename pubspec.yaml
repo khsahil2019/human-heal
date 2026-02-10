@@ -1,0 +1,43 @@
+name: human_heal
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+9
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  get: ^4.7.2
+  intl: ^0.20.2
+  device_info_plus: ^11.5.0
+  shared_preferences: ^2.5.3
+  http: ^1.4.0
+  lottie: ^3.3.1
+  image_picker: ^1.1.2
+  url_launcher: ^6.3.2
+  razorpay_flutter: ^1.4.0
+  share_plus: ^12.0.0
+  # razorpay_flutter: ^1.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/imgs/
+    - assets/animations/
+    - assets/icon/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
