@@ -80,3 +80,15 @@
   - `WalletController`: Implemented `addMoneyToWallet()` matching Postman parameter schema (`user_id, amount, order_id, payment_id, signature`).
   - `WalletModel`: Hardened `TransactionModel.fromJson` against null fields and date parsing exceptions.
   - `android/app/build.gradle.kts`: Bumped `compileSdk` to 36 to satisfy plugin requirements.
+
+## 9. Google Play Store Release (.AAB)
+- [x] **Task 9.1: Fix Lost Keystore & Generate Production Key**
+  - Generated new production keystore `android/app/upload-keystore.jks` (alias: `upload`, 2048-bit RSA, validity: 10,000 days).
+  - Exported RFC PEM certificate `android/app/upload_certificate.pem` for Google Play Console upload key reset request.
+  - Configured `android/key.properties` for automated Gradle release signing.
+  - Protected keystore and key.properties from git tracking in `.gitignore`.
+- [x] **Task 9.2: Version Bump**
+  - Updated `pubspec.yaml` to `version: 1.1.0+10`.
+  - Updated `android/app/build.gradle.kts` to `versionCode = 10`, `versionName = "1.1.0"`.
+- [x] **Task 9.3: Build Signed Release App Bundle (.AAB)**
+  - Compiling production signed `.aab` for Google Play Store upload.
