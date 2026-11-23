@@ -7,6 +7,7 @@ import 'package:human_heal/app/routes/app_routes.dart';
 import 'package:human_heal/app/services/api_service.dart';
 import 'package:human_heal/app/services/token_storage.dart';
 import 'package:human_heal/app/services/user_storage.dart';
+import 'package:human_heal/app/utils/snackbar_helper.dart';
 
 class AuthController extends GetxController {
   // Observables
@@ -61,11 +62,7 @@ class AuthController extends GetxController {
     final password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Please enter email and password",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "Please enter email and password");
       return;
     }
 
@@ -102,10 +99,9 @@ class AuthController extends GetxController {
           );
           await UserStorage.saveUser(user);
 
-          Get.snackbar(
+          safeSnackbar(
             "Success",
             response["message"]?.toString() ?? "Login successful",
-            snackPosition: SnackPosition.BOTTOM,
           );
 
           Future.delayed(const Duration(milliseconds: 500), () {
@@ -126,14 +122,13 @@ class AuthController extends GetxController {
           });
         }
       } else {
-        Get.snackbar(
+        safeSnackbar(
           "Login Failed",
           response["message"]?.toString() ?? "Invalid credentials",
-          snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      safeSnackbar("Error", e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -153,20 +148,12 @@ class AuthController extends GetxController {
         mobile.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Please fill all fields",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "Please fill all fields");
       return;
     }
 
     if (password != confirmPassword) {
-      Get.snackbar(
-        "Error",
-        "Passwords do not match",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "Passwords do not match");
       return;
     }
 
@@ -189,10 +176,9 @@ class AuthController extends GetxController {
             response["id"]?.toString() ??
             "";
 
-        Get.snackbar(
+        safeSnackbar(
           "Success",
           response["message"]?.toString() ?? "Registration successful",
-          snackPosition: SnackPosition.BOTTOM,
         );
 
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -207,14 +193,13 @@ class AuthController extends GetxController {
           );
         });
       } else {
-        Get.snackbar(
+        safeSnackbar(
           "Error",
           response["message"]?.toString() ?? "Registration failed",
-          snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      safeSnackbar("Error", e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -245,28 +230,22 @@ class AuthController extends GetxController {
         );
         await UserStorage.saveUser(user);
 
-        Get.snackbar(
+        safeSnackbar(
           "Success",
           response['message']?.toString() ?? "Account verified successfully",
-          snackPosition: SnackPosition.BOTTOM,
         );
 
         Future.delayed(const Duration(milliseconds: 500), () {
           Get.offAllNamed(AppRoutes.MAIN);
         });
       } else {
-        Get.snackbar(
+        safeSnackbar(
           "Error",
           response['message']?.toString() ?? 'Invalid OTP',
-          snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Failed to verify OTP: $e",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "Failed to verify OTP: $e");
     } finally {
       isLoading.value = false;
     }
@@ -282,20 +261,18 @@ class AuthController extends GetxController {
       });
 
       if (response['status'] == "1") {
-        Get.snackbar(
+        safeSnackbar(
           "Success",
           response['message']?.toString() ?? 'OTP resent successfully',
-          snackPosition: SnackPosition.BOTTOM,
         );
       } else {
-        Get.snackbar(
+        safeSnackbar(
           "Error",
           response['message']?.toString() ?? 'Failed to resend OTP',
-          snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
-      Get.snackbar("Error", "Error: $e", snackPosition: SnackPosition.BOTTOM);
+      safeSnackbar("Error", "Error: $e");
     } finally {
       isLoading.value = false;
     }
@@ -306,39 +283,23 @@ class AuthController extends GetxController {
     if (currentPasswordController.text.isEmpty ||
         newPasswordController.text.isEmpty ||
         confirmPasswordChangeController.text.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Please fill all password fields",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "Please fill all password fields");
       return;
     }
 
     if (newPasswordController.text != confirmPasswordChangeController.text) {
-      Get.snackbar(
-        "Error",
-        "New password and confirm password do not match",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "New password and confirm password do not match");
       return;
     }
 
     if (currentPasswordController.text == newPasswordController.text) {
-      Get.snackbar(
-        "Error",
-        "The new password must be different from the current password",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "The new password must be different from the current password");
       return;
     }
 
     final user = await UserStorage.getUser();
     if (user == null) {
-      Get.snackbar(
-        "Error",
-        "User not logged in",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      safeSnackbar("Error", "User not logged in");
       return;
     }
 
@@ -353,10 +314,9 @@ class AuthController extends GetxController {
       });
 
       if (response["status"]?.toString() == "1") {
-        Get.snackbar(
+        safeSnackbar(
           "Success",
           response["message"]?.toString() ?? 'Password updated successfully',
-          snackPosition: SnackPosition.BOTTOM,
         );
 
         currentPasswordController.clear();
@@ -369,14 +329,13 @@ class AuthController extends GetxController {
           mainController.changeTab(4); // Profile tab
         });
       } else {
-        Get.snackbar(
+        safeSnackbar(
           "Error",
           response["message"]?.toString() ?? 'Failed to update password',
-          snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
-      Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      safeSnackbar("Error", e.toString());
     } finally {
       isChangePasswordLoading.value = false;
     }
@@ -386,10 +345,9 @@ class AuthController extends GetxController {
     await TokenStorage.clearToken();
     await UserStorage.clearUser();
 
-    Get.snackbar(
+    safeSnackbar(
       "Session Expired",
       "Your account was removed or your session expired. Please log in again.",
-      snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.red.shade400,
       colorText: Colors.white,
     );
@@ -406,11 +364,7 @@ class AuthController extends GetxController {
     clearSignupFields();
     clearLoginFields();
 
-    Get.snackbar(
-      "Logged Out",
-      "You have been logged out",
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    safeSnackbar("Logged Out", "You have been logged out");
 
     Future.delayed(const Duration(milliseconds: 500), () {
       Get.offAllNamed(AppRoutes.LOGIN);

@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:http/http.dart' as http;
-import 'package:human_heal/app/controllers/auth_controller.dart';
 import 'package:human_heal/app/data/constants.dart';
 import 'package:human_heal/app/routes/app_routes.dart';
 import 'package:human_heal/app/services/user_storage.dart';
+import 'package:human_heal/app/utils/snackbar_helper.dart';
 
 import 'token_storage.dart';
 
@@ -103,9 +102,21 @@ class ApiService {
     debugPrint("[API Service] Response (${response.statusCode}): ${response.body}");
 
     if (response.statusCode == 401) {
-      // 🔥 User unauthorized -> auto logout
-      final authController = Get.put(AuthController());
-      authController.handleUnauthorized();
+      // 🔥 User unauthorized -> auto logout safely
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await TokenStorage.clearToken();
+        await UserStorage.clearUser();
+        safeSnackbar(
+          "Session Expired",
+          "Your session expired. Please log in again.",
+          backgroundColor: Colors.red.shade400,
+          colorText: Colors.white,
+        );
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (Get.context != null) {
+          Get.offAllNamed(AppRoutes.LOGIN);
+        }
+      });
       return {
         'status': '0',
         'message': 'Unauthorized. User logged out automatically.',
@@ -157,20 +168,5 @@ class ApiService {
       'message': message,
       'error': e.toString(),
     };
-  }
-
-  void handleUnauthorized() async {
-    await TokenStorage.clearToken();
-    await UserStorage.clearUser();
-
-    Get.snackbar(
-      "Session Expired",
-      "Your account was removed or your session expired. Please log in again.",
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.red.shade400,
-      colorText: Colors.white,
-    );
-
-    Get.offAllNamed(AppRoutes.LOGIN);
   }
 }
