@@ -102,51 +102,50 @@ class WalletController extends GetxController {
     }
   }
 
-  // Future<bool> addMoneyToWallet({
-  //   required String transactionId,
-  //   required double amount,
-  //   required String paymentMethod,
-  //   String paymentStatus = 'success',
-  //   String responsePayload = '',
-  // }) async {
-  //   try {
-  //     log("🔹 Adding money to wallet: $amount via $paymentMethod");
-  //     final user = await UserStorage.getUser();
-  //     if (user == null || user.id == null) {
-  //       errorMessage.value = 'User not logged in';
-  //       log("❌ User not logged in");
-  //       return false;
-  //     }
+  Future<bool> addMoneyToWallet({
+    required String orderId,
+    required String paymentId,
+    required String signature,
+    required double amount,
+  }) async {
+    try {
+      log("🔹 Adding money to wallet: $amount");
+      final user = await UserStorage.getUser();
+      if (user == null || user.id == null) {
+        errorMessage.value = 'User not logged in';
+        log("❌ User not logged in");
+        return false;
+      }
 
-  //     final body = {
-  //       "user_id": user.id.toString(),
-  //       "amount": amount.toString(),
-  //       "transaction_id": transactionId,
-  //       "payment_method": paymentMethod,
-  //       "payment_status": paymentStatus,
-  //       "response_payload": responsePayload,
-  //     };
+      final body = {
+        "user_id": user.id.toString(),
+        "amount": amount.toString(),
+        "order_id": orderId,
+        "payment_id": paymentId,
+        "signature": signature,
+      };
 
-  //     log("🔹 addMoneyToWallet request body: $body");
+      log("🔹 addMoneyToWallet request body: $body");
 
-  //     final response = await ApiService.postRequest('add-wallet', body);
+      final response = await ApiService.postRequest('add-wallet', body);
 
-  //     log("🔸 addMoneyToWallet response: $response");
+      log("🔸 addMoneyToWallet response: $response");
 
-  //     if (response['status'] == '1') {
-  //       await fetchWalletBalance(user.id.toString());
-  //       log("✅ Money added successfully to wallet");
-  //       return true;
-  //     } else {
-  //       errorMessage.value = response['message'] ?? 'Failed to add money';
-  //       log("❌ Failed to add money: ${response['message']}");
-  //       return false;
-  //     }
-  //   } catch (e, st) {
-  //     errorMessage.value = 'Failed to add money: $e';
-  //     log("❌ Error in addMoneyToWallet: $e");
-  //     log("$st");
-  //     return false;
-  //   }
-  // }
+      if (response['status']?.toString() == '1') {
+        await fetchWalletBalance(user.id.toString());
+        await fetchTransactions(user.id.toString());
+        log("✅ Money added successfully to wallet");
+        return true;
+      } else {
+        errorMessage.value = response['message'] ?? 'Failed to add money';
+        log("❌ Failed to add money: ${response['message']}");
+        return false;
+      }
+    } catch (e, st) {
+      errorMessage.value = 'Failed to add money: $e';
+      log("❌ Error in addMoneyToWallet: $e");
+      log("$st");
+      return false;
+    }
+  }
 }

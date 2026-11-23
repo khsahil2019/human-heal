@@ -56,13 +56,27 @@
   - Identified backend PHP FatalError preventing all API responses:
     `Cannot declare class App\Http\Controllers\Api because the name is already in use at /home/u519152088/domains/humanhealhealthcare.com/public_html/app/app/Http/Controllers/Api.php line 24`.
 
-## 7. Backend Action Required (For Server Administrator / PHP Developer)
-- [ ] **Fix Class Name Conflict in Laravel Backend (`Api.php`)**:
-  - The file `/home/u519152088/domains/humanhealhealthcare.com/public_html/app/app/Http/Controllers/Api.php` is declaring `class Api` which is either loaded multiple times (e.g. via an explicit `require`/`include` in `routes/api.php`) or conflicts with another controller/class with the same name.
-  - Changing duplicate `require` to `require_once` or removing manual includes so Composer PSR-4 handles autoloading will immediately restore all mobile APIs.
+## 7. Backend Action & Status Updates
+- [x] **Backend Class Name Conflict Fixed (`Api.php`)**:
+  - The duplicate class declaration error on Hostinger server is RESOLVED. Live endpoints now return proper JSON.
+- [ ] **Database Migration for Razorpay Gateways & Orders**:
+  - `GET /get-payment-keys` returned SQL Error: `tbl_payment_gateways` table missing.
+  - `POST /create-order` returned SQL Error: `tbl_create_orders` table missing.
+  - Backend database admin needs to run migrations or create these two tables.
 - [ ] **Add missing `api/delete-account` route to `routes/api.php`**.
 
 ## 8. Build & Device Deployment
 - [x] **Task 8.1: Build APK & Run on Attached Device**
   - Generated APK at `build/app/outputs/flutter-apk/app-debug.apk`.
   - Installed and launched successfully on attached device (CPH2469, Android 14, PID: 18977).
+- [x] **Task 8.2: Comprehensive Postman API Testing (27 Endpoints)**
+  - Tested all 27 Postman collection APIs against live production server `https://humanhealhealthcare.com/app/api`:
+  - 25 APIs returned HTTP 200 OK with valid payloads.
+  - 2 APIs returned HTTP 500 due to missing MySQL tables (`tbl_payment_gateways`, `tbl_create_orders`).
+- [x] **Task 8.3: Flutter API Implementation & Hardening**
+  - `ProfileController`: Added server-side `POST /logout` call, replaced raw snackbars with `safeSnackbar()`.
+  - `ReferralController`: Replaced raw snackbars with `safeSnackbar()`.
+  - `PasswordController`: Replaced raw snackbars with `safeSnackbar()`, confirmed 10-digit number handling.
+  - `WalletController`: Implemented `addMoneyToWallet()` matching Postman parameter schema (`user_id, amount, order_id, payment_id, signature`).
+  - `WalletModel`: Hardened `TransactionModel.fromJson` against null fields and date parsing exceptions.
+  - `android/app/build.gradle.kts`: Bumped `compileSdk` to 36 to satisfy plugin requirements.

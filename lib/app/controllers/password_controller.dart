@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:human_heal/app/data/models/user_model.dart';
 import 'package:human_heal/app/services/api_service.dart';
 import 'package:human_heal/app/services/user_storage.dart';
 import 'package:human_heal/app/routes/app_routes.dart';
+import 'package:human_heal/app/utils/snackbar_helper.dart';
 
 class PasswordController extends GetxController {
   var isLoading = false.obs;
@@ -22,12 +24,13 @@ class PasswordController extends GetxController {
   void showSnackbar(String title, String message, {bool isError = false}) {
     if (!isSnackbarActive.value) {
       isSnackbarActive.value = true;
-      Get.snackbar(
+      safeSnackbar(
         title,
         message,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: isError ? null : null,
-      ).future.then((_) {
+        backgroundColor: isError ? Colors.red.shade400 : Colors.green.shade600,
+        colorText: Colors.white,
+      );
+      Future.delayed(const Duration(seconds: 2), () {
         isSnackbarActive.value = false;
       });
     }

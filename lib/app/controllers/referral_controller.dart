@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:human_heal/app/services/api_service.dart';
+import 'package:human_heal/app/utils/snackbar_helper.dart';
 
 class ReferralController extends GetxController {
   var doctorList = <Map<String, dynamic>>[].obs;
@@ -20,17 +21,15 @@ class ReferralController extends GetxController {
           ),
         );
       } else {
-        Get.snackbar(
+        safeSnackbar(
           'Error',
           response['message'] ?? 'Failed to load doctors',
-          snackPosition: SnackPosition.BOTTOM,
         );
       }
     } catch (e) {
-      Get.snackbar(
+      safeSnackbar(
         'Error',
         'Failed to load doctors',
-        snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
       isLoadingDoctors.value = false;
@@ -60,26 +59,23 @@ class ReferralController extends GetxController {
       );
 
       if (response['status']?.toString() == "1") {
-        Get.snackbar(
+        safeSnackbar(
           'Success',
           response['message'] ?? 'We will contact you soon.',
-          snackPosition: SnackPosition.BOTTOM,
         );
         Get.offAllNamed('/login');
         return true;
       } else {
-        Get.snackbar(
+        safeSnackbar(
           'Error',
           response['message'] ?? 'Submission failed',
-          snackPosition: SnackPosition.BOTTOM,
         );
         return false;
       }
     } catch (e) {
-      Get.snackbar(
+      safeSnackbar(
         'Error',
         'Failed to submit referral',
-        snackPosition: SnackPosition.BOTTOM,
       );
       return false;
     } finally {

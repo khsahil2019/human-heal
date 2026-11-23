@@ -1,0 +1,992 @@
+{
+  "info": {
+    "_postman_id": "8386b554-9ce9-465d-b153-8f75a94fe781",
+    "name": "Human Healthcare",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9461918",
+    "_collection_link": "https://go.postman.co/collection/9461918-8386b554-9ce9-465d-b153-8f75a94fe781?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\"abc Garg\",\r\n    \"email\":\"akash@gmail.com\",\r\n    \"mobile\":\"8826281076\",\r\n    \"password\":\"123456\",\r\n    \"device_type\":\"Android\",\r\n    \"referal_code\":\"TH107693\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/register",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"akash@gmail.com\",\r\n    \"password\":\"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/login",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit Profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "2|I7KQleciiLubeWy9u616xoAWTL9wTEINErZvpfuo92fb795d",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/edit-profile",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "edit-profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "2|I7KQleciiLubeWy9u616xoAWTL9wTEINErZvpfuo92fb795d",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"name\":\"Akash\",\r\n    \"gender\":\"M\",\r\n    \"dob\":\"1995-09-30\",\r\n    \"height\":\"135\",\r\n    \"weight\":\"75\",\r\n    \"blood_group\":\"A+\",\r\n    \"address\":\"noida\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/update-profile",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "update-profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Profile Picture",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "2|reuDrU0LmZpN0ieBDwKCvwZnmxpuvm77YASJQjXNe1174de2",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "user_id",
+              "value": "1",
+              "type": "text"
+            },
+            {
+              "key": "image",
+              "type": "file",
+              "src": "/C:/Users/DELL/OneDrive/Desktop/burj.jpeg"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/update-profile-picture",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "update-profile-picture"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify OTP",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"otp\":\"3610\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/verify-otp",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "verify-otp"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Resend OTP",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/resend-otp",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "resend-otp"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Change Password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "2|reuDrU0LmZpN0ieBDwKCvwZnmxpuvm77YASJQjXNe1174de2",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"old\":\"654321\",\r\n    \"new\":\"123456\",\r\n    \"confirm\":\"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/change-password",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "change-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Forgot Password",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"3\",\r\n    \"email\":\"akashgarg@gmail.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/forgot-password",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "forgot-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Set New Password",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"12\",\r\n    \"new\":\"Admin@1234\",\r\n    \"confirm\":\"Admin@1234\"\r\n\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/set-new-password",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "set-new-password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/logout",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Hospital List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "266|c1FdBiIU6OE0KJVKEhTDT3il99ClUlcjqaKP70tkca108733",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"keyword\":\"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/hospital-list",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "hospital-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Doctor List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "264|YwfElayyLNbMm4FBiQYNEEdciLvtI80yVreJzLhQ08cf9b9a",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"hospital_id\":\"52\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/doctor-list",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "doctor-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Lab Test List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "57|4stz8MYD5dfIRmSd5H5o6ar0bvwZfEpwUozWfHhsc8609736",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"keyword\":\"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/lab-test-list",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "lab-test-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Book an Appointment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "29|1vPhgmpkcJk1FsfTzpnL5JsknktKYAH3CyNpQy6z90772530",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"hospital_id\":\"1\",\r\n    \"doctor_id\":\"1\",\r\n    \"name\":\"Akash Garg\",\r\n    \"email\":\"akash@gmail.com\",\r\n    \"mobile\":\"8826281076\",\r\n    \"date\":\"2025-06-10\",\r\n    \"comment\":\"Test Message\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/book-an-appointment",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "book-an-appointment"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Appointment List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "177|JdWaq5cGOjTHaMYKFWsQlqZkFjTWPkLS0bW50dDCe895851e",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/appointment-list",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "appointment-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Wallet",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "401|uA9a3puOrymb38pVKlaokepDFWIGTRQfrdtMLnoNa1b01f0f",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"174\",\r\n    \"amount\":\"600\",\r\n    \"order_id\":\"TYH*UJKLO0\",\r\n    \"payment_id\":\"UPI\",\r\n    \"signature\":\"success\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/add-wallet",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "add-wallet"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Wallet List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "2|I7KQleciiLubeWy9u616xoAWTL9wTEINErZvpfuo92fb795d",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/wallet-list",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "wallet-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User Wallet Balance",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "53|ta8lpN44gvAbG79UXdNmEKqTArvkAzhmwdeCr4OO13eac28d",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/get-user-wallet-balance",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "get-user-wallet-balance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Place an order",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "57|4stz8MYD5dfIRmSd5H5o6ar0bvwZfEpwUozWfHhsc8609736",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\",\r\n    \"lab_test_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/place-an-order",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "place-an-order"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Order List",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "57|4stz8MYD5dfIRmSd5H5o6ar0bvwZfEpwUozWfHhsc8609736",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/order-list",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "order-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Have a doctor referal",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"patient_name\":\"akash garg\",\r\n    \"referal_from\":\"vinit\",\r\n    \"referal_to\":\"1\",\r\n    \"comment\":\"liver fatty\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "/https://humanhealhealthcare.com/app/api/have-a-doctor-referal",
+          "protocol": "/https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "have-a-doctor-referal"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm Appointment",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "57|4stz8MYD5dfIRmSd5H5o6ar0bvwZfEpwUozWfHhsc8609736",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"appointment_id\":\"2\",\r\n    \"user_id\":\"1\",\r\n    \"amount\":\"10\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/confirm-appointment",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "confirm-appointment"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Doctor List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/get-doctor-list",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "get-doctor-list"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm Order",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "57|4stz8MYD5dfIRmSd5H5o6ar0bvwZfEpwUozWfHhsc8609736",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"order_id\":\"ORD-20250612160111-3192\",\r\n    \"amount\":\"250\",\r\n    \"user_id\":\"1\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/confirm-order",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "confirm-order"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Payment Gateway Keys",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/get-payment-keys",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "get-payment-keys"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "398|XcLSn3BTRQJHsDCe6qh1bQ5RQS18OPm4LsAOoS11f4f2aa63",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user_id\":\"2\",\r\n    \"amount\":\"100\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://humanhealhealthcare.com/app/api/create-order",
+          "protocol": "https",
+          "host": [
+            "humanhealhealthcare",
+            "com"
+          ],
+          "path": [
+            "app",
+            "api",
+            "create-order"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

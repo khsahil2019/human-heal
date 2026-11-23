@@ -164,7 +164,7 @@ class AuthController extends GetxController {
         "name": name,
         "email": email,
         "mobile": mobile,
-        "referal_code": referralCode,
+        "referal_code": referralCode.isNotEmpty ? referralCode : "0",
         "password": password,
         "device_type": Platform.isIOS ? "iOS" : "Android",
       });

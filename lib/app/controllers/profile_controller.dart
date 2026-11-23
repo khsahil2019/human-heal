@@ -10,6 +10,7 @@ import 'package:human_heal/app/services/user_storage.dart';
 import 'package:human_heal/app/data/models/user_model.dart';
 import 'package:human_heal/app/data/constants.dart';
 import 'package:human_heal/app/routes/app_routes.dart';
+import 'package:human_heal/app/utils/snackbar_helper.dart';
 
 class ProfileController extends GetxController {
   var user = Rxn<UserModel>();
@@ -216,9 +217,20 @@ class ProfileController extends GetxController {
   }
 
   Future<void> logout() async {
-    await TokenStorage.clearToken();
-    await UserStorage.clearUser();
-    Get.offAllNamed(AppRoutes.LOGIN);
+    try {
+      final currentUser = user.value ?? await UserStorage.getUser();
+      if (currentUser != null && currentUser.id != null) {
+        await ApiService.postRequest("logout", {
+          "user_id": currentUser.id.toString(),
+        });
+      }
+    } catch (e) {
+      print("Logout API error: $e");
+    } finally {
+      await TokenStorage.clearToken();
+      await UserStorage.clearUser();
+      Get.offAllNamed(AppRoutes.LOGIN);
+    }
   }
 
   Future<bool> deleteAccount() async {
@@ -240,28 +252,25 @@ class ProfileController extends GetxController {
         await TokenStorage.clearToken();
         await UserStorage.clearUser();
         Get.offAllNamed(AppRoutes.LOGIN);
-        Get.snackbar(
+        safeSnackbar(
           "Account Deleted",
           response['message']?.toString() ?? "Your account has been deleted.",
-          snackPosition: SnackPosition.BOTTOM,
         );
         return true;
       } else {
         errorMessage.value =
             response['message']?.toString() ?? 'Failed to delete account';
-        Get.snackbar(
+        safeSnackbar(
           "Error",
           errorMessage.value,
-          snackPosition: SnackPosition.BOTTOM,
         );
         return false;
       }
     } catch (e) {
       errorMessage.value = 'Error deleting account: $e';
-      Get.snackbar(
+      safeSnackbar(
         "Error",
         errorMessage.value,
-        snackPosition: SnackPosition.BOTTOM,
       );
       return false;
     } finally {
