@@ -38,6 +38,16 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
   bool _isLoading = false;
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _commentController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
+
   // Future<void> _selectDate() async {
   //   DateTime? picked = await showDatePicker(
   //     context: context,
@@ -99,7 +109,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         comment: _commentController.text.trim(),
       );
 
-      if (bookResponse['status'] == '1') {
+      if (bookResponse['status']?.toString() == '1') {
         // Appointment booked successfully, now confirm
         final appointmentId =
             int.tryParse(bookResponse['appointment_id'].toString()) ?? 0;
@@ -113,7 +123,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
           amount: fee,
         );
 
-        if (confirmResponse['status'] == '1') {
+        if (confirmResponse['status']?.toString() == '1') {
           // Success - navigate to success screen
           if (mounted) {
             Navigator.pushReplacement(

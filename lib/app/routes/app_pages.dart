@@ -4,6 +4,7 @@ import 'package:human_heal/app/modules/auth/signup_screen.dart';
 import 'package:human_heal/app/modules/auth/otp_screen.dart';
 import 'package:human_heal/app/modules/home/home_screen.dart';
 import 'package:human_heal/app/modules/main/main_screen.dart';
+import 'package:human_heal/app/modules/profile/delete_account_screen.dart';
 import 'package:human_heal/app/modules/profile/profile_screen.dart';
 import 'package:human_heal/app/modules/auth/otp_verification_signup_screen.dart';
 import '../modules/splash/splash_screen.dart';
@@ -28,9 +29,11 @@ class AppPages {
     GetPage(
       name: AppRoutes.FORGOT,
       page: () => ForgetPasswordScreen(),
-    ), // add if used
+    ),
     GetPage(name: AppRoutes.PROFILE, page: () => const ProfileTab()),
-
-    // Add other screens here
+    GetPage(
+      name: AppRoutes.DELETE_ACCOUNT,
+      page: () => const DeleteAccountScreen(),
+    ),
   ];
 }

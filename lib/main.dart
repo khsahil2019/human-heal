@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'app/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +18,7 @@ class HumanHealApp extends StatelessWidget {
     return GetMaterialApp(
       title: "Human Heal",
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
       initialRoute: AppRoutes.SPLASH,
       getPages: AppPages.routes,
     );

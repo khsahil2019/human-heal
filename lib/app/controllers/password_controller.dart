@@ -49,7 +49,7 @@ class PasswordController extends GetxController {
         'email': email,
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         userId.value = response['user_id'].toString();
         otpCode.value = response['otp'].toString();
         successMessage.value = response['message'] ?? 'OTP sent successfully';
@@ -83,7 +83,7 @@ class PasswordController extends GetxController {
         'otp': otp,
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         final userModel = UserModel.fromJson(response['data']);
         user.value = userModel;
         userId.value = userModel.id.toString();
@@ -115,7 +115,7 @@ class PasswordController extends GetxController {
         'user_id': userId.value,
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         otpCode.value = response['otp'].toString();
         successMessage.value = response['message'] ?? 'OTP resent successfully';
         showSnackbar("Success", successMessage.value);
@@ -154,7 +154,7 @@ class PasswordController extends GetxController {
         'confirm': confirmPass,
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         successMessage.value =
             response['message'] ?? 'Password reset successful';
         showSnackbar("Success", successMessage.value);

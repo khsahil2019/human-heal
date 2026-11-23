@@ -7,18 +7,32 @@ import '../../../controllers/doctor_controller.dart';
 import '../../../controllers/wallet_controller.dart';
 import '../../../data/models/doctor_model.dart';
 
-class DoctorListScreen extends StatelessWidget {
+class DoctorListScreen extends StatefulWidget {
   final String hospitalName;
   final int hospitalId;
 
-  DoctorListScreen({
-    Key? key,
+  const DoctorListScreen({
+    super.key,
     required this.hospitalName,
     required this.hospitalId,
-  }) : super(key: key);
+  });
 
+  @override
+  State<DoctorListScreen> createState() => _DoctorListScreenState();
+}
+
+class _DoctorListScreenState extends State<DoctorListScreen> {
   final DoctorController doctorController = Get.put(DoctorController());
-  final WalletController walletController = Get.find<WalletController>();
+  late final WalletController walletController;
+
+  @override
+  void initState() {
+    super.initState();
+    walletController = Get.isRegistered<WalletController>()
+        ? Get.find<WalletController>()
+        : Get.put(WalletController());
+    doctorController.fetchDoctors(hospitalId: widget.hospitalId);
+  }
 
   // Mask mobile to show only last 4 digits
   String maskMobile(String mobile) {
@@ -39,11 +53,9 @@ class DoctorListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    doctorController.fetchDoctors(hospitalId: hospitalId);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(hospitalName),
+        title: Text(widget.hospitalName),
         backgroundColor: appColor.primaryBlue,
         foregroundColor: Colors.white,
         elevation: 0.5,
@@ -255,7 +267,7 @@ class DoctorListScreen extends StatelessWidget {
                                   doctorImage: doc.image.isNotEmpty
                                       ? doc.image
                                       : "assets/imgs/human_heal_logo.jpg",
-                                  hospitalId: hospitalId,
+                                  hospitalId: widget.hospitalId,
                                   doctorId: doc.id,
                                   doctorFees: doc.fees,
                                 ),

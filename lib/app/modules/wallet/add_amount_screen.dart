@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:human_heal/app/data/constants.dart';
+import 'package:human_heal/app/services/token_storage.dart';
 import 'package:human_heal/app/theme/color/appcolor.dart';
 import 'package:human_heal/app/widgets/custom_snackbar.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -38,15 +40,14 @@ class _AddAmountScreenState extends State<AddAmountScreen> {
 
   Future<void> _fetchPaymentKeys() async {
     try {
-      final user = await UserStorage.getUser();
-      final token = user?.token ?? '';
+      final token = await TokenStorage.getToken() ?? '';
 
       log("🟡 [Step 1] Fetching Razorpay Keys...");
 
       final response = await http.get(
-        Uri.parse("https://demo4.in/health/api/get-payment-keys"),
+        Uri.parse("${AppConstants.baseUrl}/get-payment-keys"),
         headers: {
-          "Authorization": "Bearer $token",
+          if (token.isNotEmpty) "Authorization": "Bearer $token",
           "Accept": "application/json",
         },
       );
@@ -55,7 +56,7 @@ class _AddAmountScreenState extends State<AddAmountScreen> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data['status'] == "1" && data['key_id'] != null) {
+        if (data['status']?.toString() == "1" && data['key_id'] != null) {
           setState(() {
             razorpayKeyId = data['key_id'];
           });
@@ -121,14 +122,14 @@ class _AddAmountScreenState extends State<AddAmountScreen> {
 
     try {
       final user = await UserStorage.getUser();
-      final userId = user?.id.toString() ?? '';
-      final token = user?.token ?? '';
+      final userId = user?.id?.toString() ?? '';
+      final token = await TokenStorage.getToken() ?? '';
 
       log("🟡 [Step 3] Creating Razorpay Order on backend...");
       final response = await http.post(
-        Uri.parse("https://demo4.in/health/api/create-order"),
+        Uri.parse("${AppConstants.baseUrl}/create-order"),
         headers: {
-          "Authorization": "Bearer $token",
+          if (token.isNotEmpty) "Authorization": "Bearer $token",
           "Accept": "application/json",
         },
         body: {"user_id": userId, "amount": amount.toString()},
@@ -137,7 +138,7 @@ class _AddAmountScreenState extends State<AddAmountScreen> {
       log("🟡 Backend Order Response: ${response.body}");
       final orderData = json.decode(response.body);
 
-      if (orderData['status'] == "1" && orderData['order_id'] != null) {
+      if (orderData['status']?.toString() == "1" && orderData['order_id'] != null) {
         _currentOrderId = orderData['order_id'];
         _currency = orderData['currency'] ?? 'INR';
         final keyId = orderData['key_id'] ?? razorpayKeyId;
@@ -200,11 +201,11 @@ class _AddAmountScreenState extends State<AddAmountScreen> {
 
     try {
       final user = await UserStorage.getUser();
-      final token = user?.token ?? '';
+      final token = await TokenStorage.getToken() ?? '';
       final amount = _amountController.text.trim();
 
       final body = {
-        "user_id": user?.id.toString() ?? "",
+        "user_id": user?.id?.toString() ?? "",
         "amount": amount,
         "order_id": response.orderId!,
         "payment_id": response.paymentId!,
@@ -214,9 +215,9 @@ class _AddAmountScreenState extends State<AddAmountScreen> {
       log("🟡 [Step 6] Sending payment verification to backend: $body");
 
       final res = await http.post(
-        Uri.parse("https://demo4.in/health/api/add-wallet"),
+        Uri.parse("${AppConstants.baseUrl}/add-wallet"),
         headers: {
-          "Authorization": "Bearer $token",
+          if (token.isNotEmpty) "Authorization": "Bearer $token",
           "Accept": "application/json",
         },
         body: body,
@@ -225,7 +226,7 @@ class _AddAmountScreenState extends State<AddAmountScreen> {
       log("🟢 [Step 7] Backend add-wallet response: ${res.body}");
       final data = json.decode(res.body);
 
-      if (data['status'] == "1") {
+      if (data['status']?.toString() == "1") {
         CustomSnackbar.show(
           title: "✅ Wallet Updated",
           message: data['message'] ?? "₹$amount added successfully!",

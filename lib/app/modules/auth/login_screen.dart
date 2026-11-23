@@ -7,9 +7,15 @@ import 'package:human_heal/app/theme/color/appcolor.dart';
 import 'package:human_heal/app/widgets/app_text_field.dart';
 import 'package:human_heal/app/controllers/auth_controller.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   final AuthController authController = Get.put(AuthController());
 
   @override
@@ -19,9 +25,11 @@ class LoginScreen extends StatelessWidget {
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-          child: Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+          child: Form(
+            key: _formKey,
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Logo
                 ClipRRect(
@@ -72,6 +80,15 @@ class LoginScreen extends StatelessWidget {
                   hintText: 'Enter your email',
                   prefixIcon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value.trim())) {
+                      return 'Enter a valid email address';
+                    }
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 20),
@@ -104,6 +121,12 @@ class LoginScreen extends StatelessWidget {
                     ),
                     onPressed: authController.togglePasswordVisibility,
                   ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
                 ),
 
                 const SizedBox(height: 5),
@@ -129,7 +152,11 @@ class LoginScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: authController.isLoading.value
                         ? null
-                        : () => authController.login(),
+                        : () {
+                            if (_formKey.currentState?.validate() ?? false) {
+                              authController.login();
+                            }
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: appColor.buttonColor,
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -224,6 +251,7 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

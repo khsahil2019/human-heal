@@ -30,7 +30,7 @@ class OrderListController extends GetxController {
         'user_id': user.id.toString(),
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         final orderListResponse = OrderListResponse.fromJson(response);
         orders.value = orderListResponse.data;
       } else {

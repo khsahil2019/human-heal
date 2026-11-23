@@ -27,7 +27,7 @@ class HospitalController extends GetxController {
         "keyword": keyword, // send keyword to API
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         final hospitalList = HospitalListResponse.fromJson(response);
         hospitals.assignAll(hospitalList.data);
       } else {

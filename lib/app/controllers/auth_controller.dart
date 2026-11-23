@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:human_heal/app/controllers/main_controller.dart';
@@ -56,7 +57,10 @@ class AuthController extends GetxController {
 
   /// Login method
   Future<void> login() async {
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
       Get.snackbar(
         "Error",
         "Please enter email and password",
@@ -69,27 +73,38 @@ class AuthController extends GetxController {
 
     try {
       final response = await ApiService.postRequest("login", {
-        "email": emailController.text.trim(),
-        "password": passwordController.text.trim(),
+        "email": email,
+        "password": password,
       });
 
-      if (response["status"] == "1") {
-        final userData = response["data"] ?? {};
-        final token = userData["token"];
-        final String verifiedStatus = (response["is_verified"] ?? "2")
-            .toString()
-            .trim();
+      final isSuccess = response["status"]?.toString() == "1";
+      if (isSuccess) {
+        final userData = response["data"] is Map<String, dynamic>
+            ? response["data"] as Map<String, dynamic>
+            : <String, dynamic>{};
+        final token = userData["token"] ?? response["token"];
+        final String verifiedStatus =
+            (response["is_verified"] ?? userData["is_verified"] ?? "1")
+                .toString()
+                .trim();
 
-        userId.value = userData["id"]?.toString() ?? "";
+        userId.value = userData["id"]?.toString() ??
+            response["user_id"]?.toString() ??
+            response["id"]?.toString() ??
+            "";
 
         if (verifiedStatus == "1") {
-          await TokenStorage.saveToken(token?.toString() ?? '');
-          final user = UserModel.fromJson(userData);
+          if (token != null && token.toString().isNotEmpty) {
+            await TokenStorage.saveToken(token.toString());
+          }
+          final user = UserModel.fromJson(
+            userData.isNotEmpty ? userData : response,
+          );
           await UserStorage.saveUser(user);
 
           Get.snackbar(
             "Success",
-            "Login successful",
+            response["message"]?.toString() ?? "Login successful",
             snackPosition: SnackPosition.BOTTOM,
           );
 
@@ -102,7 +117,8 @@ class AuthController extends GetxController {
             Get.toNamed(
               AppRoutes.OTP_VERIFICATION_SIGNUP,
               arguments: {
-                'email': emailController.text.trim(),
+                'email': email,
+                'mobile': userData["mobile"]?.toString() ?? "",
                 'userId': userId.value,
                 'isLogin': true,
               },
@@ -125,11 +141,18 @@ class AuthController extends GetxController {
 
   /// Register method
   Future<void> register() async {
-    if (nameController.text.trim().isEmpty ||
-        signupEmailController.text.trim().isEmpty ||
-        mobileController.text.trim().isEmpty ||
-        signupPasswordController.text.trim().isEmpty ||
-        confirmPasswordController.text.trim().isEmpty) {
+    final name = nameController.text.trim();
+    final email = signupEmailController.text.trim();
+    final mobile = mobileController.text.trim();
+    final password = signupPasswordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+    final referralCode = referralCodeController.text.trim();
+
+    if (name.isEmpty ||
+        email.isEmpty ||
+        mobile.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       Get.snackbar(
         "Error",
         "Please fill all fields",
@@ -138,8 +161,7 @@ class AuthController extends GetxController {
       return;
     }
 
-    if (signupPasswordController.text.trim() !=
-        confirmPasswordController.text.trim()) {
+    if (password != confirmPassword) {
       Get.snackbar(
         "Error",
         "Passwords do not match",
@@ -152,16 +174,20 @@ class AuthController extends GetxController {
 
     try {
       final response = await ApiService.postRequest("register", {
-        "name": nameController.text.trim(),
-        "email": signupEmailController.text.trim(),
-        "mobile": mobileController.text.trim(),
-        "referal_code": referralCodeController.text.trim(),
-        "password": signupPasswordController.text.trim(),
-        "device_type": "Android",
+        "name": name,
+        "email": email,
+        "mobile": mobile,
+        "referal_code": referralCode,
+        "password": password,
+        "device_type": Platform.isIOS ? "iOS" : "Android",
       });
 
-      if (response["status"] == "1") {
-        userId.value = response["user_id"]?.toString() ?? "";
+      final isSuccess = response["status"]?.toString() == "1";
+      if (isSuccess) {
+        userId.value = response["user_id"]?.toString() ??
+            response["data"]?["id"]?.toString() ??
+            response["id"]?.toString() ??
+            "";
 
         Get.snackbar(
           "Success",
@@ -173,8 +199,8 @@ class AuthController extends GetxController {
           Get.toNamed(
             AppRoutes.OTP_VERIFICATION_SIGNUP,
             arguments: {
-              'email': signupEmailController.text.trim(),
-              'mobile': mobileController.text.trim(),
+              'email': email,
+              'mobile': mobile,
               'userId': userId.value,
               'isLogin': false,
             },
@@ -204,17 +230,24 @@ class AuthController extends GetxController {
         'otp': otp,
       });
 
-      if (response['status'] == "1") {
-        final userData = response['data'] ?? {};
-        final token = userData['token'];
+      final isSuccess = response['status']?.toString() == "1";
+      if (isSuccess) {
+        final userData = response['data'] is Map<String, dynamic>
+            ? response['data'] as Map<String, dynamic>
+            : <String, dynamic>{};
+        final token = userData['token'] ?? response['token'];
 
-        await TokenStorage.saveToken(token?.toString() ?? '');
-        final user = UserModel.fromJson(userData);
+        if (token != null && token.toString().isNotEmpty) {
+          await TokenStorage.saveToken(token.toString());
+        }
+        final user = UserModel.fromJson(
+          userData.isNotEmpty ? userData : response,
+        );
         await UserStorage.saveUser(user);
 
         Get.snackbar(
           "Success",
-          "Account verified successfully",
+          response['message']?.toString() ?? "Account verified successfully",
           snackPosition: SnackPosition.BOTTOM,
         );
 
@@ -319,7 +352,7 @@ class AuthController extends GetxController {
         "confirm": confirmPasswordChangeController.text.trim(),
       });
 
-      if (response["status"] == "1") {
+      if (response["status"]?.toString() == "1") {
         Get.snackbar(
           "Success",
           response["message"]?.toString() ?? 'Password updated successfully',
@@ -333,7 +366,7 @@ class AuthController extends GetxController {
         Future.delayed(const Duration(milliseconds: 500), () {
           Get.offAllNamed(AppRoutes.MAIN);
           final mainController = Get.find<MainController>();
-          mainController.changeTab(3); // Profile tab
+          mainController.changeTab(4); // Profile tab
         });
       } else {
         Get.snackbar(

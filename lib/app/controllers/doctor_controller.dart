@@ -24,7 +24,7 @@ class DoctorController extends GetxController {
         'hospital_id': hospitalId.toString(),
       });
 
-      if (response['status'] == '1') {
+      if (response['status']?.toString() == '1') {
         final data = response['data'] as List;
         doctors.value = data.map((e) => Doctor.fromJson(e)).toList();
       } else {

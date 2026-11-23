@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:human_heal/app/data/models/wallet_model.dart';
 import 'package:human_heal/app/services/api_service.dart';
@@ -61,7 +60,7 @@ class WalletController extends GetxController {
 
       log("🔸 fetchWalletBalance response: $response");
 
-      if (response['status'] == '1') {
+      if (response['status']?.toString() == '1') {
         final walletBalance = WalletBalanceModel.fromJson(response['data']);
         balance.value = walletBalance.balance;
         log("✅ Wallet balance updated: ${balance.value}");
@@ -85,7 +84,7 @@ class WalletController extends GetxController {
 
       log("🔸 fetchTransactions response: $response");
 
-      if (response['status'] == '1') {
+      if (response['status']?.toString() == '1') {
         final data = response['data'] as List;
         transactions.value = data
             .map((e) => TransactionModel.fromJson(e))

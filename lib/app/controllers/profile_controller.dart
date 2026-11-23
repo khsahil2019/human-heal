@@ -38,7 +38,7 @@ class ProfileController extends GetxController {
         "user_id": storedUser.id.toString(),
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         user.value = UserModel.fromJson(response['data']);
         await UserStorage.saveUser(user.value!);
       } else {
@@ -77,7 +77,7 @@ class ProfileController extends GetxController {
         updatedData,
       );
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         user.value = UserModel.fromJson(response['data']);
         await UserStorage.saveUser(user.value!);
         return true;
@@ -216,7 +216,56 @@ class ProfileController extends GetxController {
   }
 
   Future<void> logout() async {
+    await TokenStorage.clearToken();
     await UserStorage.clearUser();
     Get.offAllNamed(AppRoutes.LOGIN);
+  }
+
+  Future<bool> deleteAccount() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      final currentUser = user.value ?? await UserStorage.getUser();
+      if (currentUser == null || currentUser.id == null) {
+        errorMessage.value = 'User not logged in';
+        return false;
+      }
+
+      final response = await ApiService.postRequest("delete-account", {
+        "user_id": currentUser.id.toString(),
+      });
+
+      if (response['status']?.toString() == "1") {
+        await TokenStorage.clearToken();
+        await UserStorage.clearUser();
+        Get.offAllNamed(AppRoutes.LOGIN);
+        Get.snackbar(
+          "Account Deleted",
+          response['message']?.toString() ?? "Your account has been deleted.",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return true;
+      } else {
+        errorMessage.value =
+            response['message']?.toString() ?? 'Failed to delete account';
+        Get.snackbar(
+          "Error",
+          errorMessage.value,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return false;
+      }
+    } catch (e) {
+      errorMessage.value = 'Error deleting account: $e';
+      Get.snackbar(
+        "Error",
+        errorMessage.value,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return false;
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

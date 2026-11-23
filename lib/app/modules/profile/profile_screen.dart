@@ -6,6 +6,7 @@ import 'package:human_heal/app/controllers/profile_controller.dart';
 import 'package:human_heal/app/modules/auth/change_passpword_screen.dart';
 import 'package:human_heal/app/modules/lab_order/lab_orderList_screen.dart';
 
+import 'package:human_heal/app/modules/profile/delete_account_screen.dart';
 import 'package:human_heal/app/modules/profile/edit_screen.dart';
 
 import 'package:human_heal/app/theme/color/appcolor.dart';
@@ -148,64 +149,16 @@ class ProfileTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // ProfileOptionTile(
-                    //   icon: Icons.delete_forever_outlined,
-                    //   label: "Delete Account",
-                    //   iconColor: Colors.red,
-                    //   textColor: Colors.red,
-                    //   onTap: () {
-                    //     // TODO: Confirm deletion
-                    //   },
-                    // ),
-                    // ProfileOptionTile(
-                    //   icon: Icons.delete_forever_outlined,
-                    //   label: "Delete Account",
-                    //   iconColor: Colors.red,
-                    //   textColor: Colors.red,
-                    //   onTap: () {
-                    //     Get.dialog(
-                    //       AlertDialog(
-                    //         backgroundColor: Colors.white,
-                    //         shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(16),
-                    //         ),
-                    //         title: const Text(
-                    //           "Delete Account",
-                    //           style: TextStyle(
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.red,
-                    //           ),
-                    //         ),
-                    //         content: const Text(
-                    //           "Are you sure you want to delete your account? This action cannot be undone.",
-                    //           style: TextStyle(fontSize: 14),
-                    //         ),
-                    //         actions: [
-                    //           TextButton(
-                    //             onPressed: () => Get.back(),
-                    //             child: const Text(
-                    //               "Cancel",
-                    //               style: TextStyle(color: Colors.green),
-                    //             ),
-                    //           ),
-                    //           ElevatedButton(
-                    //             style: ElevatedButton.styleFrom(
-                    //               backgroundColor: Colors.red,
-                    //               foregroundColor: Colors.white,
-                    //             ),
-                    //             onPressed: () {
-                    //               Get.back(); // close dialog
-                    //               // 👇 Open WebView for deletion
-                    //               //   Get.to(() => const DeleteAccountWebView());
-                    //             },
-                    //             child: const Text("Delete"),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
-                    // const SizedBox(height: 12),
+                    ProfileOptionTile(
+                      icon: Icons.delete_outline,
+                      label: "Delete Account",
+                      iconColor: Colors.red,
+                      textColor: Colors.red,
+                      onTap: () {
+                        Get.to(() => const DeleteAccountScreen());
+                      },
+                    ),
+                    const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,

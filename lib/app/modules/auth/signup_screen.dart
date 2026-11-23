@@ -5,17 +5,25 @@ import 'package:human_heal/app/theme/color/appcolor.dart';
 import 'package:human_heal/app/widgets/app_text_field.dart';
 import 'login_screen.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final AuthController authController = Get.find();
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
 
-    // ✅ Clear all text fields when screen opens
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final AuthController authController = Get.find<AuthController>();
+
+  @override
+  void initState() {
+    super.initState();
     authController.clearSignupFields();
-    final _formKey = GlobalKey<FormState>();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appColor.backgroundColor,
       appBar: AppBar(

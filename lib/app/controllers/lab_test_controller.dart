@@ -30,7 +30,7 @@ class LabTestController extends GetxController {
         "keyword": keyword, // send keyword to API
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         final labTestList = LabTestListResponse.fromJson(response);
         labTests.assignAll(labTestList.data);
       } else {
@@ -56,8 +56,8 @@ class LabTestController extends GetxController {
         "lab_test_id": labTestId,
       });
 
-      if (response['status'] == "1") {
-        String orderId = response['order_id'];
+      if (response['status']?.toString() == "1") {
+        String orderId = response['order_id']?.toString() ?? '';
         labTestOrders[labTestId] = orderId;
         return orderId;
       } else {
@@ -87,7 +87,7 @@ class LabTestController extends GetxController {
         "user_id": user.id.toString(),
       });
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         return true;
       } else {
         errorMessage.value = response['message'] ?? 'Order confirmation failed';

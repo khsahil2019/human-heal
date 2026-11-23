@@ -12,7 +12,7 @@ class ReferralController extends GetxController {
       isLoadingDoctors.value = true;
       final response = await ApiService.getRequest('get-doctor-list');
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         final List data = response['data'] ?? [];
         doctorList.assignAll(
           data.map<Map<String, dynamic>>(
@@ -59,7 +59,7 @@ class ReferralController extends GetxController {
         body,
       );
 
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         Get.snackbar(
           'Success',
           response['message'] ?? 'We will contact you soon.',

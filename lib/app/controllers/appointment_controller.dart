@@ -39,7 +39,7 @@ class AppointmentController extends GetxController {
       });
 
       // Check response status and parse data accordingly
-      if (response['status'] == "1") {
+      if (response['status']?.toString() == "1") {
         final appointmentList = AppointmentListResponse.fromJson(response);
         appointments.value = appointmentList.data;
       } else {

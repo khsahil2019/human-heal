@@ -310,7 +310,8 @@ class _AppointmentTabState extends State<AppointmentTab> {
                                                               0, // TODO: replace with real fee
                                                         );
 
-                                                if (confirmResponse['status'] ==
+                                                if (confirmResponse['status']
+                                                        ?.toString() ==
                                                     '1') {
                                                   Get.snackbar(
                                                     "Success",

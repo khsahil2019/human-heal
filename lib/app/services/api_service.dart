@@ -36,14 +36,16 @@ class ApiService {
     Map<String, String>? headers,
   }) async {
     try {
-      final response = await http.post(
-        _buildUrl(endpoint),
-        headers: await _headers(extra: headers),
-        body: jsonEncode(body),
-      );
+      final response = await http
+          .post(
+            _buildUrl(endpoint),
+            headers: await _headers(extra: headers),
+            body: jsonEncode(body),
+          )
+          .timeout(const Duration(seconds: 15));
       return _processResponse(response);
     } catch (e) {
-      return _error(e);
+      return _error(e, endpoint: endpoint);
     }
   }
 
@@ -52,13 +54,12 @@ class ApiService {
     Map<String, String>? headers,
   }) async {
     try {
-      final response = await http.get(
-        _buildUrl(endpoint),
-        headers: await _headers(extra: headers),
-      );
+      final response = await http
+          .get(_buildUrl(endpoint), headers: await _headers(extra: headers))
+          .timeout(const Duration(seconds: 15));
       return _processResponse(response);
     } catch (e) {
-      return _error(e);
+      return _error(e, endpoint: endpoint);
     }
   }
 
@@ -68,14 +69,16 @@ class ApiService {
     Map<String, String>? headers,
   }) async {
     try {
-      final response = await http.put(
-        _buildUrl(endpoint),
-        headers: await _headers(extra: headers),
-        body: jsonEncode(body),
-      );
+      final response = await http
+          .put(
+            _buildUrl(endpoint),
+            headers: await _headers(extra: headers),
+            body: jsonEncode(body),
+          )
+          .timeout(const Duration(seconds: 15));
       return _processResponse(response);
     } catch (e) {
-      return _error(e);
+      return _error(e, endpoint: endpoint);
     }
   }
 
@@ -88,25 +91,17 @@ class ApiService {
       final request = http.Request("DELETE", _buildUrl(endpoint));
       request.headers.addAll(await _headers(extra: headers));
       if (body != null) request.body = jsonEncode(body);
-      final response = await http.Response.fromStream(await request.send());
+      final streamed = await request.send().timeout(const Duration(seconds: 15));
+      final response = await http.Response.fromStream(streamed);
       return _processResponse(response);
     } catch (e) {
-      return _error(e);
+      return _error(e, endpoint: endpoint);
     }
   }
 
-  // static Map<String, dynamic> _processResponse(http.Response response) {
-  //   try {
-  //     return jsonDecode(response.body);
-  //   } catch (_) {
-  //     return {
-  //       'status': '0',
-  //       'message': 'Invalid response format',
-  //       'raw': response.body,
-  //     };
-  //   }
-  // }
   static Map<String, dynamic> _processResponse(http.Response response) {
+    debugPrint("[API Service] Response (${response.statusCode}): ${response.body}");
+
     if (response.statusCode == 401) {
       // 🔥 User unauthorized -> auto logout
       final authController = Get.put(AuthController());
@@ -118,20 +113,48 @@ class ApiService {
     }
 
     try {
-      return jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        if (response.statusCode >= 400) {
+          decoded['status'] ??= '0';
+        }
+        return decoded;
+      }
+      return {
+        'status': response.statusCode >= 400 ? '0' : '1',
+        'data': decoded,
+      };
     } catch (_) {
       return {
         'status': '0',
-        'message': 'Invalid response format',
+        'message': response.statusCode >= 400
+            ? 'Server error (${response.statusCode})'
+            : 'Invalid response format',
         'raw': response.body,
       };
     }
   }
 
-  static Map<String, dynamic> _error(dynamic e) {
+  static Map<String, dynamic> _error(dynamic e, {String endpoint = ''}) {
+    String message = 'Something went wrong';
+    final errStr = e.toString().toLowerCase();
+
+    if (errStr.contains('failed host lookup') ||
+        errStr.contains('socketexception') ||
+        errStr.contains('connection refused') ||
+        errStr.contains('network is unreachable')) {
+      message =
+          'Server unreachable (${AppConstants.baseUrl}). Please verify internet connection or backend URL.';
+    } else if (errStr.contains('timeoutexception') ||
+        errStr.contains('timed out')) {
+      message = 'Request to $endpoint timed out. Server is taking too long.';
+    } else if (e is FormatException) {
+      message = 'Invalid server response format.';
+    }
+
     return {
       'status': '0',
-      'message': 'Something went wrong',
+      'message': message,
       'error': e.toString(),
     };
   }

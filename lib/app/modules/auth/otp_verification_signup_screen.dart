@@ -173,7 +173,7 @@ class _OtpVerificationSignupScreenState
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            phoneNumber == " "
+            phoneNumber.trim().isNotEmpty
                 ? Text(
                     'We’ve sent a 4-digit code to\n $phoneNumber',
                     style: const TextStyle(
@@ -183,7 +183,7 @@ class _OtpVerificationSignupScreenState
                     textAlign: TextAlign.center,
                   )
                 : Text(
-                    'We’ve sent a 4-digit code to\n registered mobile number',
+                    'We’ve sent a 4-digit code to\n your registered mobile number',
                     style: const TextStyle(
                       fontSize: 16,
                       color: appColor.textSecondary,
