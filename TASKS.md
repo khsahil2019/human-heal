@@ -91,4 +91,9 @@
   - Updated `pubspec.yaml` to `version: 1.1.0+10`.
   - Updated `android/app/build.gradle.kts` to `versionCode = 10`, `versionName = "1.1.0"`.
 - [x] **Task 9.3: Build Signed Release App Bundle (.AAB)**
-  - Compiling production signed `.aab` for Google Play Store upload.
+  - Compiled production signed `.aab` for Google Play Store upload (version 1.1.0+10).
+- [x] **Task 9.4: Google Play Requirements Update (Target SDK 36 & Device Support)**
+  - Updated `targetSdk = 36` to satisfy Google Play's mandatory API level 36 requirement.
+  - Set `minSdk = 21` (Android 5.0) to maintain support for the 1,862 older devices without dropping compatibility.
+  - Bumped version to `version: 1.1.1+11` (`versionCode = 11`, `versionName = "1.1.1"`).
+  - Built fresh signed release App Bundle: `build/app/outputs/bundle/release/app-release.aab` (45.7 MB).
